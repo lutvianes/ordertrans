@@ -2,7 +2,7 @@ var path = require('path')
 
 module.exports = {
   'config':             path.resolve('config', 'sequelize.json'),
-  'migrations-path':    path.resolve('api', 'migrate'),
+  'migrations-path':    path.resolve('api', 'migrations'),
   'seeders-path':       path.resolve('api', 'seeders'),
   'models-path':        path.resolve('api', 'models')
 }

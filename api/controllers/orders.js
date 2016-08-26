@@ -1,8 +1,8 @@
-const Customer = require('../models').Customer
+const Order = require('../models').Order
 
 // Get all function
 function get(req, res, next) {
-    Customer.findAll().then(function(results) {
+    Order.findAll().then(function(results) {
         return res.json(results)
     }).catch(function(err) {
         return next(err)
@@ -10,7 +10,7 @@ function get(req, res, next) {
 }
 
 function create(req, res, next) {
-    Customer.create(req.body).then(function(result) {
+    Order.create(req.body).then(function(result) {
         return res.status(201).location(req.path+'/'+result.id).send()
     }).catch(function(err){
         return next(err)
@@ -21,7 +21,7 @@ function update(req, res, next) {
     if(!req.params.id)
         return next({status: 404, message: 'Not Found'})
 
-    Customer.update(req.body, {
+    Order.update(req.body, {
         where: {
             id: req.params.id
         },
@@ -40,7 +40,7 @@ function remove(req, res, next) {
     if(!req.params.id)
         return next({status: 404, message: 'Not Found'})
 
-    Customer.destroy({
+    Order.destroy({
         where: {
             id: req.params.id
         }

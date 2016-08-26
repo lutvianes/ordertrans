@@ -2,16 +2,14 @@ const express = require('express')
 const router = express.Router()
 
 /* Orders Router */
-// const orders = require('../models/orders')
-router.route('/orders')
+const controller = require('../controllers/customers')
 
 router.route('/')
-    .get(function(req, res, next) {
-        res.send('respond with a resource')
-    })
-    .post(function(req, res, next) {
-        // Orders.add(product)
-        res.send('respond with a resource')
-    })
+    .get(controller.get)
+    .post(controller.create)
+
+router.route('/:id')
+    .put(controller.update)
+    .delete(controller.remove)
 
 module.exports = router
