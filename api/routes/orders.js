@@ -9,7 +9,9 @@ router.route('/')
     .post(controller.create)
 
 router.route('/:id')
-    .put(controller.update)
     .delete(controller.remove)
+
+router.route('/:order_id/products/:product_id')
+    .put(controller.add_product)
 
 module.exports = router

@@ -1,0 +1,18 @@
+[
+    {
+        "model": "Product",
+        "data": {
+            "name": "Tank",
+            "price": 80000,
+            "quantity": 7
+        }
+    },
+    {
+        "model": "Product",
+        "data": {
+            "name": "Pistol",
+            "price": 7000,
+            "quantity": 9
+        }
+    }
+]
