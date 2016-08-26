@@ -10,40 +10,36 @@ const models = require('../../api/models')
 
 before(function(done) {
     if (app.get('env') !== 'test')
-        throw new Error("Not in test environment")
-
-    this.timeout(10000)
-    // ckears database option set in config/sequelize.json
-    models.sequelize.sync()
-        .then(function() {
-            done()
-        })
-        .catch(function(err) {
-            done(err)
-        })
+        done(new Error("Not in test environment"))
+    else
+        done()
 })
 
 describe('Customer', function() {
 
+    beforeEach(function(done) {
+        // clearing database needs more time
+        this.timeout(5000)
+        // clears database option={force:true} set in config/sequelize.json
+        models.sequelize.sync()
+            .then(function() {
+                done()
+            })
+            .catch(function(err) {
+                done(err)
+            })
+    })
+
     // Read REST API
     describe('GET /customers', function() {
 
-        // load customers data
-        before(function(done) {
-            var test = ""
+        it('should return status 200, array, and several data', function(done) {
+            // load some customers data
             fixtures.loadFile(__dirname + '/../fixtures/customers.json', models)
                 .then(function() {
-                    done()
+                    return chai.request(app).get('/api/customers')
                 })
-                .catch(function(err) {
-                    done(err)
-                })
-        })
-
-        it('should return status 200, array, and several data', function(done) {
-            chai.request(app)
-                .get('/api/customers')
-                .then(function (res) {
+                .then(function(res) {
                     res.should.have.status(200)
                     res.body.should.be.an('array')
                     res.body.length.should.be.above(0)
@@ -68,7 +64,7 @@ describe('Customer', function() {
                 .field('address', 'Foo Bar')
                 .then(function (res) {
                     res.should.have.status(201)
-                    res.get('location').should.equal('http://127.0.0.1/api/customers/3')
+                    res.get('location').should.equal('http://127.0.0.1/api/customers/1')
                     done()
                 })
                 .catch(function(err) {
