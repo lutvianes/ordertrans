@@ -11,7 +11,9 @@ function get(req, res, next) {
 
 function create(req, res, next) {
     Customer.create(req.body).then(function(result) {
-        return res.status(201).location(req.path+'/'+result.id).send()
+        return res.status(201)
+            .location('http://'+req.hostname+req.baseUrl+'/'+result.id)
+            .send()
     }).catch(function(err){
         return next(err)
     })

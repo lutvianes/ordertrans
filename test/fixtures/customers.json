@@ -1,0 +1,20 @@
+[
+    {
+        "model": "Customer",
+        "data": {
+            "name": "bar",
+            "phone_number": "081234",
+            "email": "bar@foo.com",
+            "address": "Foo bar"
+        }
+    },
+    {
+        "model": "Customer",
+        "data": {
+            "name": "bar 2",
+            "phone_number": "081234",
+            "email": "bar@foo.com",
+            "address": "Foo bar 2"
+        }
+    }
+]
