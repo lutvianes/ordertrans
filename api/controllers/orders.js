@@ -11,6 +11,11 @@ function get() {
     return Order.findAll()
 }
 
+function getById(id) {
+    return Order.findById(id)
+}
+
+
 function create(order) {
     return Order.create(order)
 }
@@ -82,7 +87,11 @@ function applyCoupon(orderId, couponCode) {
             if (!coupon)
                 return Promise.reject(new Error('Coupon id Not Found'))
 
-            return order.addCoupon(coupon, { coupon_status: 'applied' })
+            return models.sequelize.query(
+                "UPDATE Orders SET CouponId=:coupon_id,coupon_status='applied' WHERE id = :order_id",
+                { replacements: { coupon_id: coupon.id, order_id: order.id } }
+            )
+            // return order.addCoupon(coupon, { coupon_status: 'applied' })
         })
 }
 
@@ -100,6 +109,13 @@ function verify(id) {
     })
 }
 
+function cancel(id) {
+    return Order.update({ status: 'cancelled' }, {
+        where: { id: id },
+        limit: 1
+    })
+}
+
 module.exports = {
     get: get,
     create: create,
@@ -107,5 +123,8 @@ module.exports = {
     remove: remove,
     addProduct: addProduct,
     applyCoupon: applyCoupon,
-    submit: submit
+    getById: getById,
+    submit: submit,
+    verify: verify,
+    cancel: cancel
 }

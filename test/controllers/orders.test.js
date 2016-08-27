@@ -89,25 +89,31 @@ describe('Order Controler', function() {
 
     })
 
-    describe.skip('Coupon', function() {
+    describe('Coupon', function() {
 
         it('should apply coupon to order', function(done) {
             fixtures.loadFiles([
                 __dirname + '/../fixtures/orders.json',
-                __dirname + '/../fixtures/products.json'
+                __dirname + '/../fixtures/coupons.json'
             ], models)
                 .then(function() {
                      // order_id, couponCode
                     return controller.applyCoupon(1, "foo")
                 })
-                .should.eventually.equal(100)
-                .notify(done)
+                .then(function([result]) {
+                    result.affectedRows.should.equal(1)
+                    done()
+                })
+                .catch(function(err) {
+                    done(err)
+                })
+
         })
 
         it('should not apply outside valid date range', function(done) {
             fixtures.loadFiles([
                 __dirname + '/../fixtures/orders.json',
-                __dirname + '/../fixtures/products.json'
+                __dirname + '/../fixtures/coupons.json'
             ], models)
                 .then(function() {
                      // order_id, {product_id, quantity}

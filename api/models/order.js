@@ -7,7 +7,8 @@ module.exports = function(sequelize, DataTypes) {
             'submitted', 'validated', 'cancelled', 'shipped', 'completed'
         ),
         allowNull: true
-    }
+    },
+    coupon_status: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

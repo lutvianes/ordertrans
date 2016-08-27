@@ -214,7 +214,7 @@ describe('Orders', function() {
     describe.skip('DELETE /orders/:id', function() {
 
         // Admin - Cancel order
-        it('should return status 200, array, and several data', function(done) {
+        it('should cancel order', function(done) {
 
         })
     })

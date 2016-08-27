@@ -26,6 +26,15 @@ router.route('/')
     })
 
 router.route('/:id')
+    .get(function(req, res, next) {
+        controller.getById(req.params.id)
+            .then(function(result) {
+                res.json(result)
+            })
+            .catch(function(err) {
+                next(err)
+            })
+    })
     .delete(controller.remove)
 
 router.route('/:order_id/products')
@@ -68,7 +77,7 @@ router.route('/submit/:order_id')
     })
 
 router.route('/verify/:order_id')
-    .post(function(req, res, next) {
+    .put(function(req, res, next) {
         controller.verify(req.params.order_id)
             .then(function(result) {
                 res.status(204).send()
@@ -77,5 +86,16 @@ router.route('/verify/:order_id')
                 next(err)
             })
     })
-    
+
+router.route('/cancel/:order_id')
+    .post(function(req, res, next) {
+        controller.cancel(req.params.order_id)
+            .then(function(result) {
+                res.json(result)
+            })
+            .catch(function(err) {
+                next(err)
+            })
+    })
+
 module.exports = router

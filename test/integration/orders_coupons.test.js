@@ -54,7 +54,7 @@ describe('Orders', function() {
 
         // Customer - Apply coupons to already submitted order
         // should fail
-        it('should fail when applied to submitted order', function(done) {
+        it.skip('should fail when applied to submitted order', function(done) {
 
         })
     })
