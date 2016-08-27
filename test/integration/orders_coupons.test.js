@@ -48,7 +48,6 @@ describe('Orders', function() {
                     done()
                 })
                 .catch(function(err) {
-                    console.error(err);
                     done(err)
                 })
         })

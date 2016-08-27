@@ -1,0 +1,24 @@
+[
+    {
+        "model": "Coupon",
+        "data": {
+            "code": "foo",
+            "valid_date_start": "2016-08-01",
+            "valid_date_end": "2016-09-01",
+            "quantity": 1,
+            "discount_percentage": 0.5,
+            "discount_nominal": 0
+        }
+    },
+    {
+        "model": "Coupon",
+        "data": {
+            "code": "bar",
+            "valid_date_start": "2016-10-01",
+            "valid_date_end": "2016-12-01",
+            "quantity": 2,
+            "discount_percentage": 0,
+            "discount_nominal": 1000
+        }
+    }
+]

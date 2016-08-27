@@ -29,13 +29,12 @@ router.route('/:id')
     .delete(controller.remove)
 
 router.route('/:order_id/products')
+    // Add product
     .post(function(req, res, next) {
-        if(!req.params.order_id && !req.body.product)
+        if(!req.params.order_id && !req.body)
             return next()
-
-        controller.addProduct(req.params.order_id, req.body.product)
+        controller.addProduct(req.params.order_id, req.body)
             .then(function(result) {
-                console.log(result);
                 res.status(204).send()
             })
             .catch(function(err) {
@@ -43,4 +42,40 @@ router.route('/:order_id/products')
             })
     })
 
+router.route('/:order_id/coupons')
+    // Apply coupon
+    .post(function(req, res, next) {
+        if(!req.params.order_id)
+            return next()
+        controller.applyCoupon(req.params.order_id, req.body.code)
+            .then(function(result) {
+                res.status(204).send()
+            })
+            .catch(function(err) {
+                next(err)
+            })
+    })
+
+router.route('/submit/:order_id')
+    .post(function(req, res, next) {
+        controller.submit(req.params.order_id)
+            .then(function(result) {
+                res.status(204).send()
+            })
+            .catch(function(err) {
+                next(err)
+            })
+    })
+
+router.route('/verify/:order_id')
+    .post(function(req, res, next) {
+        controller.verify(req.params.order_id)
+            .then(function(result) {
+                res.status(204).send()
+            })
+            .catch(function(err) {
+                next(err)
+            })
+    })
+    
 module.exports = router

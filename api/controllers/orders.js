@@ -1,8 +1,10 @@
 const Promise = require('bluebird')
 
-const Order = require('../models/order')
-const Product = require('../models/product')
-const Coupon = require('../models/coupon')
+const models = require('../models')
+
+const Order = models.Order
+const Product = models.Product
+const Coupon = models.Coupon
 
 // Get all
 function get() {
@@ -51,6 +53,10 @@ function remove(req, res, next) {
 }
 
 function addProduct(orderId, product) {
+    // Validation
+    if (product.quantity <= 0)
+        return Promise.reject(new Error('Cannot order '+product.quantity+' product'))
+
     let order = Order.findById(orderId)
     let prod = Product.findById(product.id)
 
@@ -66,17 +72,30 @@ function addProduct(orderId, product) {
 }
 
 function applyCoupon(orderId, couponCode) {
-    return Coupon.findOne({ where: { code: couponCode } })
-        .then(function() {
+    let order = Order.findById(orderId)
+    let coupon = Coupon.findOne({ where: { code: couponCode } })
 
+    return Promise.join(order, coupon)
+        .then(function([order, coupon]) {
+            if (!order)
+                return Promise.reject(new Error('Order id Not Found'))
+            if (!coupon)
+                return Promise.reject(new Error('Coupon id Not Found'))
+
+            return order.addCoupon(coupon, { coupon_status: 'applied' })
         })
 }
 
-function submitOrder(id) {
+function submit(id) {
     return Order.update({ status: 'submitted' }, {
-        where: {
-            id: id
-        },
+        where: { id: id },
+        limit: 1
+    })
+}
+
+function verify(id) {
+    return Order.update({ status: 'validated' }, {
+        where: { id: id },
         limit: 1
     })
 }
@@ -87,5 +106,6 @@ module.exports = {
     update: update,
     remove: remove,
     addProduct: addProduct,
-    applyCoupon: applyCoupon
+    applyCoupon: applyCoupon,
+    submit: submit
 }
