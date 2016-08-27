@@ -41,30 +41,28 @@ describe('Orders', function() {
                 .then(function() {
                     return chai.request(app)
                         .post('/api/orders/1/products')
-                        .field('product_id[0]', 1)
-                        .field('quantity[0]', 2)
-                        .field('product_id[1]', 2)
-                        .field('quantity[1]', 7)
+                        .send({ product_id: 2, quantity: 5})
                 })
                 .then(function (res) {
                     res.should.have.status(204)
+                    res.get('location').should.equal('http://127.0.0.1/api/orders/1/products/1')
                     done()
                 })
                 .catch(function(err) {
-                    console.error(err);
+                    // console.error(err);
                     done(err)
                 })
         })
 
         // Add products to submitted order
         // should fail
-        it('should fail when submitted to submitted order', function() {
+        it.skip('should fail when submitted to submitted order', function() {
 
         })
     })
 
     // Edit REST API
-    describe('PUT /orders/:id/products/:id', function() {
+    describe.skip('PUT /orders/:id/products/:id', function() {
         // Customer - Replace product in orders
         it('should return status 204', function(done) {
             fixtures.loadFiles([
@@ -81,7 +79,7 @@ describe('Orders', function() {
                     done()
                 })
                 .catch(function(err) {
-                    console.error(err);
+                    // console.error(err);
                     done(err)
                 })
         })

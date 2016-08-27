@@ -1,45 +1,16 @@
 const Promise = require('bluebird')
 
-const Order = require('../models').Order
-const Product = require('../models').Product
+const Order = require('../models/order')
+const Product = require('../models/product')
+const Coupon = require('../models/coupon')
 
-// Get all function
-function get(req, res, next) {
-    Order.findAll().then(function(results) {
-        return res.json(results)
-    }).catch(function(err) {
-        return next(err)
-    })
+// Get all
+function get() {
+    return Order.findAll()
 }
 
-function create(req, res, next) {
-    Order.create(req.body).then(function(result) {
-        return res.status(201).location(req.path+'/'+result.id).send()
-    }).catch(function(err){
-        return next(err)
-    })
-}
-
-function add_product(req, res, next) {
-    if(!req.params.order_id && !req.params.product_id)
-        return next()
-
-    let order = Order.findById(req.params.order_id)
-    let product = Product.findById(req.params.product_id)
-
-    Promise.join(order, product)
-        .then(function(order, product) {
-            if (order == null || product == null)
-                return next()
-
-            return order.addProduct(product, { quantity: req.body.quantity })
-        })
-        .then(function() {
-            res.status(204).send()
-        })
-        .catch(function(err) {
-            next(err)
-        })
+function create(order) {
+    return Order.create(order)
 }
 
 function update(req, res, next) {
@@ -79,10 +50,42 @@ function remove(req, res, next) {
     })
 }
 
+function addProduct(orderId, product) {
+    let order = Order.findById(orderId)
+    let prod = Product.findById(product.id)
+
+    return Promise.join(order, prod)
+        .then(function([order, prod]) {
+            if (!order)
+                return Promise.reject(new Error('Order id Not Found'))
+            if (!prod)
+                return Promise.reject(new Error('Product id Not Found'))
+
+            return order.addProduct(prod, { quantity: product.quantity })
+        })
+}
+
+function applyCoupon(orderId, couponCode) {
+    return Coupon.findOne({ where: { code: couponCode } })
+        .then(function() {
+
+        })
+}
+
+function submitOrder(id) {
+    return Order.update({ status: 'submitted' }, {
+        where: {
+            id: id
+        },
+        limit: 1
+    })
+}
+
 module.exports = {
     get: get,
     create: create,
     update: update,
     remove: remove,
-    add_product: add_product
+    addProduct: addProduct,
+    applyCoupon: applyCoupon
 }

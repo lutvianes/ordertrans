@@ -31,7 +31,7 @@ describe('Orders', function() {
     })
 
     // Read REST API
-    describe.skip('GET /orders', function() {
+    describe('GET /orders', function() {
         // Get all orders
         it('should return status 200, array, and several data', function(done) {
             // load some orders data
@@ -42,10 +42,8 @@ describe('Orders', function() {
                 .then(function(res) {
                     res.should.have.status(200)
                     res.body.should.be.an('array')
-                    res.body.should.deep.equal([
-                        { order_number: "P-01" },
-                        { order_number: "P-02"}
-                    ])
+                    res.body[0].should.have.property('order_number', 'P-01')
+                    res.body[1].should.have.property('order_number', 'P-02')
                     done()
                 })
                 .catch(function(err) {
@@ -54,7 +52,7 @@ describe('Orders', function() {
         })
 
         // Admin - Get all submitted orders
-        it('should return status 200, array, and several data', function(done) {
+        it.skip('should return status 200, array, and several data', function(done) {
             // load some orders, customers data, payment proofs
             fixtures.loadFile(__dirname + '/../fixtures/orders.json', models)
                 .then(function() {
@@ -219,5 +217,5 @@ describe('Orders', function() {
         it('should return status 200, array, and several data', function(done) {
 
         })
-    }
+    })
 })
