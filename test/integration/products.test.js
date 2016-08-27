@@ -15,7 +15,7 @@ before(function(done) {
         done()
 })
 
-describe('Orders', function() {
+describe('Products', function() {
 
     beforeEach(function(done) {
         // clearing database needs more time
@@ -30,34 +30,26 @@ describe('Orders', function() {
             })
     })
 
-    // Create REST API
-    describe('POST /orders/:id/coupons', function() {
-        // Customer - Apply coupons to orders
-        it('should success apply coupons', function(done) {
-            fixtures.loadFiles([
-                __dirname + '/../fixtures/orders.json',
-                __dirname + '/../fixtures/coupons.json'
-            ], models)
+    // Read REST API
+    describe.skip('GET /products', function() {
+        // Get all products
+        it('should return status 200, array, and several data', function(done) {
+            // load some products data
+            fixtures.loadFile(__dirname + '/../fixtures/products.json', models)
                 .then(function() {
-                    return chai.request(app)
-                        .post('/api/orders/1/coupons')
-                        .field('code', "BEBAS20")
+                    return chai.request(app).get('/api/products')
                 })
-                .then(function (res) {
-                    res.should.have.status(204)
+                .then(function(res) {
+                    res.should.have.status(200)
+                    res.body.should.be.an('array')
+                    res.body.length.should.be.above(0)
                     done()
                 })
                 .catch(function(err) {
-                    console.error(err);
                     done(err)
                 })
         })
 
-        // Customer - Apply coupons to already submitted order
-        // should fail
-        it('should fail when applied to submitted order', function(done) {
-
-        })
     })
 
 })

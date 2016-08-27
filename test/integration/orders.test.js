@@ -42,7 +42,10 @@ describe('Orders', function() {
                 .then(function(res) {
                     res.should.have.status(200)
                     res.body.should.be.an('array')
-                    res.body.length.should.be.above(0)
+                    res.body.should.deep.equal([
+                        { order_number: "P-01" },
+                        { order_number: "P-02"}
+                    ])
                     done()
                 })
                 .catch(function(err) {

@@ -2,13 +2,13 @@
     {
         "model": "Order",
         "data": {
-            "order_number": "XXY-001"
+            "order_number": "P-01"
         }
     },
     {
         "model": "Order",
         "data": {
-            "order_number": "XXN-004"
+            "order_number": "P-02"
         }
     }
 ]
